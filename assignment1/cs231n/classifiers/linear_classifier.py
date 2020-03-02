@@ -15,25 +15,10 @@ class LinearClassifier(object):
 
     def train(self, X, y, learning_rate=1e-3, reg=1e-5, num_iters=100,
               batch_size=200, verbose=False):
-        """
-        Train this linear classifier using stochastic gradient descent.
 
-        Inputs:
-        - X: A numpy array of shape (N, D) containing training data; there are N
-          training samples each of dimension D.
-        - y: A numpy array of shape (N,) containing training labels; y[i] = c
-          means that X[i] has label 0 <= c < C for C classes.
-        - learning_rate: (float) learning rate for optimization.
-        - reg: (float) regularization strength.
-        - num_iters: (integer) number of steps to take when optimizing
-        - batch_size: (integer) number of training examples to use at each step.
-        - verbose: (boolean) If true, print progress during optimization.
-
-        Outputs:
-        A list containing the value of the loss function at each training iteration.
-        """
         num_train, dim = X.shape
-        num_classes = np.max(y) + 1 # assume y takes values 0...K-1 where K is number of classes
+        # assume y takes values 0...K-1 where K is number of classes
+        num_classes = np.max(y) + 1 
         if self.W is None:
             # lazily initialize W
             self.W = 0.001 * np.random.randn(dim, num_classes)
@@ -56,8 +41,10 @@ class LinearClassifier(object):
             # replacement is faster than sampling without replacement.              #
             #########################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-            pass
+            
+            batch_idx = np.random.choice(num_train, batch_size, replace=False)
+            X_batch = X[batch_idx] 
+            y_batch = y[batch_idx]
 
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -72,7 +59,7 @@ class LinearClassifier(object):
             #########################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-            pass
+            self.W -= learning_rate*grad
 
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -102,7 +89,8 @@ class LinearClassifier(object):
         ###########################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        pass
+        ys = np.dot(X, self.W)
+        y_pred = np.argmax(ys, axis=1)
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return y_pred
